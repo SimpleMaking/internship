@@ -1,65 +1,54 @@
-from itertools import product
+import itertools as it
 
 def count_find_num(primesL, limit):
-    
-    primesL = sorted(primesL)
-    current_number = 1
-    number_and_degree = list()
-    number_and_degree_ = list()
-    
-    for i in range(len(primesL)):
-        number_and_degree_.append(1)
-        number_and_degree_.append(primesL[i])
-        number_and_degree.append(number_and_degree_)
-        number_and_degree_ = list()
+    list_of_degree = list()
+    list_of_numbers = list()
+    #if limit <= 1000:
+    for i in range(1, 11):
+        list_of_degree.append(i)
         
+    count_of_opt = it.product(list_of_degree, repeat=len(primesL))
+    temp = 1
+    for value in count_of_opt:
+        for i in range(len(value)):
+            temp *= (primesL[i] ** value[i])
+        list_of_numbers.append(temp)
+        temp = 1
     
-    for i in range(len(primesL)):
-        current_number *= primesL[i]
-
-
-    value = 1
-    count_of_numbers = 1
-    itter = 0
-    while current_number < limit:
-        while True:
-            for i in range(len(number_and_degree)):
-                value *=  (number_and_degree[i][0] ** number_and_degree[i][1])
-            if value > current_number:
-                current_number = value
-                value = 1       
-                for i in range(len(number_and_degree)):
-                    number_and_degree[i][1] = 1
-                break
-            else:
-                number_and_degree[0][itter] += 1
-                
-    '''
-    current_number = 1
-    for i in range(len(primesL)):
-        current_number *= primesL[i]
-    start_value = current_number
-    count_of_numbers = 1
-    numbers_to_compare = list()
-    while current_number < limit:
-        while True:
-            for i in range(len(primesL)):
-                numbers_to_compare.append(start_value * primesL[i])
-            if min(numbers_to_compare) > current_number:
-                current_number = min(numbers_to_compare)
-                break
-            else:
-                start_value = min(numbers_to_compare)
-        print(numbers_to_compare)
-        #current_number = min(numbers_to_compare)
-        count_of_numbers += 1
-        numbers_to_compare = list()
-        ''' 
-    return [count_of_numbers, current_number]
-
-
+    list_of_numbers = sorted(list_of_numbers)
+    
+    for value in list_of_numbers:
+        if value > limit:
+            list_of_numbers = list_of_numbers[:list_of_numbers.index(value)]
+            break
+    if list_of_numbers:
+        pass
+    else:
+        return []   
+    return [len(list_of_numbers), list_of_numbers[-1]]
+   
+    
 primesL = [2, 5, 7]
 limit = 500
 assert count_find_num(primesL, limit) == [5, 490]
 
 
+primesL = [2, 3]
+limit = 200
+assert count_find_num(primesL, limit) == [13, 192]
+
+primesL = [2, 5]
+limit = 200
+assert count_find_num(primesL, limit) == [8, 200]
+
+primesL = [2, 3, 5]
+limit = 500
+assert count_find_num(primesL, limit) == [12, 480]
+
+primesL = [2, 3, 5]
+limit = 1000
+assert count_find_num(primesL, limit) == [19, 960]
+
+primesL = [2, 3, 47]
+limit = 200
+assert count_find_num(primesL, limit) == []
