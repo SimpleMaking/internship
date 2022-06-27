@@ -1,25 +1,19 @@
 import itertools as it
 
-def compress_improve(data, selectors):
-    list_of_values = list()
-    for d, s in zip(data, selectors):
-        if s:
-            list_of_values.append(d)
-        else:
-            list_of_values.append("-")      
-    return ''.join(list_of_values)
-
-
+CONST_LEN = 6
+CONST_STR = 'banana'
 def bananas(s) -> set:
     result = set()
-    count_of_opt = it.product([1, 0], repeat = len(s))
+    count_of_opt = it.combinations(range(len(s)), len(s) - CONST_LEN)
+    cur_str = list(s)
     for value in count_of_opt:
-          
-        value_ = compress_improve(s, value)
-        if value_.replace("-", "") == "banana":
-            result.add(value_)
+        for value_ in value:
+            cur_str[value_] = '-'
+        cur_str = ''.join(cur_str)
+        if cur_str.replace('-', '') == CONST_STR:
+            result.add(cur_str)
+        cur_str = list(s)
     return result
-
 
 assert bananas("banann") == set()
 assert bananas("banana") == {"banana"}

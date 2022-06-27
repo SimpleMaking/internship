@@ -10,7 +10,7 @@ def count_find_num(primesL, limit):
     for i in primesL:
         for value in general_numbers:
             number = value * i
-            if (number <= limit) and (number not in general_numbers):
+            if number <= limit and number not in general_numbers:
                 general_numbers.append(number)
                 number *= i
 
