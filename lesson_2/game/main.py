@@ -10,11 +10,10 @@ class App(Tk):
          
         def __init__(self, pointer_of_human_player):
             super().__init__()
-            print(pointer_of_human_player)
-            #self.geometry("500x500+450+180")
+            self.pointer_of_human_player = pointer_of_human_player
             self.resizable(width=False, height=False)
             self.title("Крестики-нолики наоборот")
-            self.game_run = True
+            self.defeat_ = False
             self.field = []
             self.cross_count = 0 
             self.show()
@@ -54,13 +53,79 @@ class App(Tk):
             if self.can_win(self.field[2][0], self.field[1][1], self.field[0][2], 'X'):
                 return
             while True:
-                row = random.randint(0, 10)
-                col = random.randint(0, 10)
-                if self.field[row][col]['text'] == ' ':
+                row = random.randint(0, 9)
+                col = random.randint(0, 9)
+                if self.field[row][col]['text'] == ' ' and self.pointer_of_human_player == 1:
                     self.field[row][col]['text'] = 'O'
+                    self.cross_count += 1
+                    break
+                elif self.field[row][col]['text'] == ' ' and self.pointer_of_human_player == 2:
+                    self.field[row][col]['text'] = 'X'
+                    self.cross_count += 1
                     break
         
         
+        def defeat_check(self):
+            line_of_defeat = list()
+            for y in range(6):
+                for x in range(6):
+                    line_of_defeat = list()
+                    ch = self.field[y][x]['text']
+                    line_of_defeat.append(self.field[y][x])
+                    defeat = True
+                    for i in range(1, 5):
+                        if self.field[y + i][x + i]['text'] != ch:
+                            defeat = False
+                            line_of_defeat = list()
+                            break
+                        elif self.field[y + i][x + i]['text'] != ' ':
+                            line_of_defeat.append(self.field[y + i][x + i])
+                            
+                    if defeat:
+                        if ch == 'X':
+                            for value in line_of_defeat:
+                                value['background'] = 'yellow'
+                            messagebox.showinfo("Оповещение", "Крестики проиграли, а нолики выиграли!")
+                            self.destroy()
+                            return True
+                        elif ch == 'O':
+                            for value in line_of_defeat:
+                                value['background'] = 'yellow'
+                            messagebox.showinfo("Оповещение", "Нолики проиграли, а крестики выиграли!")
+                            self.destroy()
+                            return True
+                        
+            line_of_defeat = list()          
+            for y in range(4, 10):
+                for x in range(6):
+                    line_of_defeat = list()
+                    ch = self.field[y][x]['text']
+                    line_of_defeat.append(self.field[y][x])
+                    defeat = True
+                    for i in range(1, 5):
+                        if self.field[y - i][x + i]['text'] != ch:
+                            defeat = False
+                            line_of_defeat = list()
+                            break
+                        elif self.field[y - i][x + i]['text'] != ' ':
+                            line_of_defeat.append(self.field[y - i][x + i])
+                            
+                    if defeat:
+                        if ch == 'X':
+                            for value in line_of_defeat:
+                                value['background'] = 'yellow'
+                            messagebox.showinfo("Оповещение", "Крестики проиграли, а нолики выиграли!")
+                            self.destroy()
+                            return True
+                        elif ch == 'O':
+                            for value in line_of_defeat:
+                                value['background'] = 'yellow'
+                            messagebox.showinfo("Оповещение", "Нолики проиграли, а крестики выиграли!")
+                            self.destroy()
+                            return True
+
+            return False
+        '''
         def check_win(self, smb):
             for n in range(10):
                 self.check_line(self.field[n][0], self.field[n][1], self.field[n][2], smb)
@@ -72,7 +137,7 @@ class App(Tk):
             if a1['text'] == smb and a2['text'] == smb and a3['text'] == smb:
                 a1['background'] = a2['background'] = a3['background'] = 'yellow'
                 self.game_run = False
-        
+        '''
         
         def new_game(self):
             for row in range(10):
@@ -80,20 +145,34 @@ class App(Tk):
                     self.field[row][col]['text'] = ' '
                     self.field[row][col]['background'] = 'lavender'
  
-            self.game_run = True
+            self.defeat_ = False
             self.cross_count = 0
     
     
         def click(self, row, col):
-            if self.game_run and self.field[row][col]['text'] == ' ':
-                self.field[row][col]['text'] = 'X'
-                self.cross_count += 1
-                self.check_win('X')
-                if self.game_run and self.cross_count < 5:
-                    self.computer_move()
-                    self.check_win('O')
-                
             
+            if self.cross_count >= 100:
+                messagebox.showinfo("Оповещение", "Боевая ничья!")
+                self.destroy()
+                return
+            if self.pointer_of_human_player == 1:
+                if self.defeat_ != True and self.field[row][col]['text'] == ' ':
+                    self.field[row][col]['text'] = 'X'
+                    self.cross_count += 1
+                    self.defeat_ = self.defeat_check()
+                    if self.defeat_ != True and self.cross_count < 100:
+                        self.computer_move()
+                        self.defeat_ = self.defeat_check()
+            else:
+                if self.defeat_ != True and self.field[row][col]['text'] == ' ':
+                    self.field[row][col]['text'] = 'O'
+                    self.cross_count += 1
+                    self.defeat_ = self.defeat_check()
+                    if self.defeat_ != True and self.cross_count < 100:
+                        self.computer_move()
+                        self.defeat_ = self.defeat_check()
+                  
+                           
         def show(self):
             for row in range(10):
                 line = []
@@ -102,6 +181,10 @@ class App(Tk):
                     button.grid(row=row, column=col, sticky='nsew')
                     line.append(button)
                 self.field.append(line)
+                
+            if self.pointer_of_human_player == 2:
+                self.computer_move()
+                self.defeat_ = self.defeat_check()
             #self.new_button = Button(self, text='new game', command=self.new_game)
             #self.new_button.grid(row=3, column=0, columnspan=3, sticky='nsew')
             
