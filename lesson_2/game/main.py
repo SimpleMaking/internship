@@ -290,7 +290,7 @@ class App(Tk):
                     self.field[row][col]['text'] = 'X'
                     self.count_of_steps += 1
                     self.defeat_ = self.defeat_check_diags()
-                    if self.defeat_ != True and self.count_of_steps < 100:
+                    if self.defeat_ != True and self.count_of_steps < COUNT_OF_POS:
                         self.computer_moving()
                         self.defeat_ = self.defeat_check_diags()
             else:
@@ -298,7 +298,7 @@ class App(Tk):
                     self.field[row][col]['text'] = 'O'
                     self.count_of_steps += 1
                     self.defeat_ = self.defeat_check_diags()
-                    if self.defeat_ != True and self.count_of_steps < 100:
+                    if self.defeat_ != True and self.count_of_steps < COUNT_OF_POS:
                         self.computer_moving()
                         self.defeat_ = self.defeat_check_diags()
                   
