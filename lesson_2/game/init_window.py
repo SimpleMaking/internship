@@ -6,6 +6,7 @@ class init_win(Tk):
         super().__init__()
         self.geometry("300x200+450+180")
         self.resizable(width=False, height=False)
+        self.iconbitmap('image.ico')
         self.title("Крестики-нолики наоборот")
         self.pointer_of_human_player = 1
         self.but_1 = Button(self, text="play with X", font=('Verdana', 10, 'bold'), command=lambda: self.get_data(1))
@@ -21,20 +22,3 @@ class init_win(Tk):
         else:
             self.pointer_of_human_player = 2
             self.destroy()
-'''
-class bot_player:
-    def __init__(self, data_about_marker) -> None:
-        self.pointer = data_about_marker
-    
-    def check(self):
-        pass
-    def how_to_go(self):
-        pass
-    
-class human_player:
-    def __init__(self, data_about_marker) -> None:
-        self.pointer = data_about_marker
-        
-    def check(self):
-        pass
-        '''
