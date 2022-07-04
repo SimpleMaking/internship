@@ -307,7 +307,7 @@ class App(Tk):
             for row in range(WIDTH):
                 line = []
                 for col in range(HEIGHT):
-                    button = Button(self, text=' ', width=2, height=1, font=('Verdana', 20, 'bold'), background='lavender', command=lambda row=row, col=col: self.click(row,col))
+                    button = Button(self, text=' ', width=2, height=1, font=('Verdana', 20, 'bold'), background='white', command=lambda row=row, col=col: self.click(row,col))
                     button.grid(row=row, column=col, sticky='nsew')
                     line.append(button)
                 self.field.append(line)
