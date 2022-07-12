@@ -1,4 +1,4 @@
-from antagonistfinder import AntagonistFinder
+from antagonistfinder import Place
 from abc import ABC, abstractmethod
 
 class GiperHero(ABC):
@@ -25,10 +25,9 @@ class SuperHero(GiperHero):
     def __init__(self, name, can_use_ultimate_attack=True):
         self.name = name
         self.can_use_ultimate_attack = can_use_ultimate_attack
-        self.finder = AntagonistFinder()
 
     def find(self, place):
-        self.finder.get_antagonist(place)
+        Place.get_antagonist(Place, place)
  
     def fire_a_gun(self):
         print('PIU PIU')
@@ -40,19 +39,23 @@ class SuperHero(GiperHero):
         self.fire_a_gun()
 
     def ultimate(self):
-        if self.name == 'Clark Kent':
-            self.incinerate_with_lasers()
+        self.fire_a_gun()
+        
 
 
 class Superman(SuperHero):
     def __init__(self):
         super(Superman, self).__init__('Clark Kent', True)
-
-    def attack(self):
-        return super().attack()
     
-    # можно и переопределить, если нужно
+    def getting_power(self):
+        print("Brrrrrrraaaahhhh")
+        
+    def attack(self):
+        self.getting_power()
+    
+    #переопределяем для каждого наследника SuperHero
     def ultimate(self):
-        return super().ultimate()
+        if 'Cl' in self.name:
+            self.incinerate_with_lasers()
     
         
