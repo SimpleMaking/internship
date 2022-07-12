@@ -39,7 +39,7 @@ class SuperHero(GiperHero):
         self.fire_a_gun()
 
     def ultimate(self):
-        self.fire_a_gun()
+        self.incinerate_with_lasers()
         
 
 
@@ -49,13 +49,14 @@ class Superman(SuperHero):
     
     def getting_power(self):
         print("Brrrrrrraaaahhhh")
+
         
     def attack(self):
         self.getting_power()
     
     #переопределяем для каждого наследника SuperHero
     def ultimate(self):
-        if 'Cl' in self.name:
-            self.incinerate_with_lasers()
+        print("CRUNK!")
+            
     
         
