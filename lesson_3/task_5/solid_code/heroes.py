@@ -1,4 +1,4 @@
-from antagonistfinder import Place
+from antagonistfinder import AntagonistFinder
 from abc import ABC, abstractmethod
 
 class GiperHero(ABC):
@@ -25,9 +25,10 @@ class SuperHero(GiperHero):
     def __init__(self, name, can_use_ultimate_attack=True):
         self.name = name
         self.can_use_ultimate_attack = can_use_ultimate_attack
+        self.finder = AntagonistFinder()
 
     def find(self, place):
-        Place.get_antagonist(Place, place)
+        self.finder.get_antagonist(place)
  
     def fire_a_gun(self):
         print('PIU PIU')
