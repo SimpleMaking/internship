@@ -5,8 +5,8 @@ from fastapi import FastAPI
 from src.api.v1.resources import posts
 from src.core import config
 from src.db import cache, redis_cache
-from src.db.db import engine
-from sqlmodel import SQLModel
+#from src.db.db import engine
+#from sqlmodel import SQLModel
 
 app = FastAPI(
     # Конфигурируем название проекта. Оно будет отображаться в документации
@@ -45,8 +45,8 @@ if __name__ == "__main__":
     # `uvicorn main:app --host 0.0.0.0 --port 8000`
     # но чтобы не терять возможность использовать дебагер,
     # запустим uvicorn сервер через python
-    tables = SQLModel()
-    tables.metadata.create_all(engine)
+    #tables = SQLModel()
+    #tables.metadata.create_all(engine)
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
