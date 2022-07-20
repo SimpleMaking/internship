@@ -12,7 +12,7 @@ import sqlmodel
 
 # revision identifiers, used by Alembic.
 revision = '6260580c89c4'
-down_revision = '2c5b35619743'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -26,6 +26,19 @@ def upgrade() -> None:
     sa.Column('views', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
+    )
+    
+    op.create_table('users',
+    sa.Column('uuid', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('username', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('roles', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('is_superuser', sa.Boolean(), nullable=True),
+    sa.Column('is_totp_enabled', sa.Boolean(), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
+    sa.Column('email', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('password_hash', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.PrimaryKeyConstraint('uuid')
     )
  
 def downgrade() -> None:
