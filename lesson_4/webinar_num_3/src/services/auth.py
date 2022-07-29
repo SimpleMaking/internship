@@ -13,6 +13,7 @@ from src.services import ServiceMixin
 from src.db import AbstractCache, get_cache, get_session
 from functools import lru_cache
 from uuid import uuid4
+
     
 class AuthService(ServiceMixin):
 
@@ -45,22 +46,24 @@ class AuthService(ServiceMixin):
       
     def create_tokens(self, user: db.User) -> Tokens:
         user_data = User.from_orm(user)
-        
+        user_data_dict = user_data.dict()
+        user_data_dict["created_at"] = str(user_data_dict["created_at"])
         now = datetime.utcnow()
+        
         payload = {
-            'iat': now,
-            'ref': now,
-            'exp': now + timedelta(days=0, minutes=config.JWT_EXPIRATION),
+            'iat': 0,
+            'ref': 0,
+            'exp': now + timedelta(seconds=config.JWT_EXPIRATION),
             'scope': 'access_token',
-            'user': user_data.dict(),
+            'user': user_data_dict,
         }
         access_token = jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.JWT_ALGORITHM)
         payload = {
-            'iat': now,
-            'ref': now,
-            'exp': now + timedelta(days=0, hours=20),
+            'iat': 0,
+            'ref': 0,
+            'exp': now + timedelta(seconds=config.JWT_EXPIRATION * 24),
             'scope': 'refresh_token',
-            'user': user_data.dict(),
+            'user': user_data_dict,
         }
         refresh_token = jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.JWT_ALGORITHM)
         
@@ -69,14 +72,16 @@ class AuthService(ServiceMixin):
     
     def create_token(self, user: db.User) -> Token:
         user_data = User.from_orm(user)
-        
+        user_data_dict = user_data.dict()
+        user_data_dict["created_at"] = str(user_data_dict["created_at"])
         now = datetime.utcnow()
+        
         payload = {
-            'iat': now,
-            'ref': now,
-            'exp': now + timedelta(days=0, minutes=config.JWT_EXPIRATION),
+            'iat': 0,
+            'ref': 0,
+            'exp': now + timedelta(seconds=config.JWT_EXPIRATION),
             'scope': 'access_token',
-            'user': user_data.dict(),
+            'user': user_data_dict,
         }
         access_token = jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.JWT_ALGORITHM)
         return Token(access_token=access_token)
@@ -100,7 +105,8 @@ class AuthService(ServiceMixin):
     def authenticate_user(self, username: str, password: str) -> Tokens:
         exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="incorrect username or password", headers={'WWW-Authenticate': 'Bearer'})
         user = self.session.query(User).filter(User.username == username).first()
-        
+       
+
         if not user:
             raise exception
         
@@ -111,7 +117,7 @@ class AuthService(ServiceMixin):
     
     
     
-    def get_profile_info(self, token: str) -> User:
+    def get_profile_info(self, token: str) -> dict:
         user = self.validate_token(token)
         user = dict(user)
         user.pop("password_hash")

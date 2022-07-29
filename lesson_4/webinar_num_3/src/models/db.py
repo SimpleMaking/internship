@@ -10,7 +10,7 @@ class User(SQLModel, table=True):
     uuid: str = Field(default=None, primary_key=True)
     username: str = Field(nullable=False)
     roles: list[str] = Field(default=None)
-    created_at: datetime = Field(default=str(datetime.utcnow()), nullable=False)
+    created_at: datetime = Field(default=datetime.utcnow(), nullable=False)
     is_superuser: bool = Field(default=False)
     is_totp_enabled: bool = Field(default=False)
     is_active: bool = Field(default=True)
@@ -25,5 +25,5 @@ class Post(SQLModel, table=True):
     description: str = Field(nullable=False)
     views: int = Field(default=0)
     #user_uuid: str = Field(foreign_key="users.uuid")
-    created_at: datetime = Field(default=str(datetime.utcnow()), nullable=False)
+    created_at: datetime = Field(default=datetime.utcnow(), nullable=False)
 
