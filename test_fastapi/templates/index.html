@@ -2,19 +2,26 @@
 <html>
 <body>  
 
-<div>
- {{ form.body }}
-</div>
-<div>
-    {{ form.submit }}
-</div>
-<ul class="posts">
+    <div class="container">
+        <form action="/main_page" enctype="multipart/form-data" method="post">
+            <label>message</label>
+            <br>
+            <textarea name="post" cols="40" rows="3"></textarea>
+            </br>
+            <br>
+            <input type="submit">
+            </br>
+        </form>
+    </div> 
+
+
+<ol class="posts">
  {% for post in posts %}
  <li class="post">
- <div class="post-body">{{ post }}</div>
+ <div class="post-body">{{ post.description }}</div>
  </li>
  {% endfor %}
-</ul>
+</ol>
 
 </body>
 </html>
