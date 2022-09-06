@@ -19,13 +19,16 @@ app = FastAPI(
 
 # Подключаем роутеры к серверу
 #app.include_router(router=routes.router)
-from urllib.request import Request
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 import uvicorn
 
 
-app = FastAPI()
+app = FastAPI( # Адрес документации в красивом интерфейсе
+    docs_url="/api/openapi",
+    redoc_url="/api/redoc",
+    # Адрес документации в формате OpenAPI
+    openapi_url="/api/openapi.json",)
 html = """
 <!DOCTYPE html>
 <html>
@@ -44,7 +47,7 @@ html = """
             var ws = new WebSocket("ws://localhost:8000/ws");
             ws.onmessage = function(event) {
                 var messages = document.getElementById('messages')
-                var message = document.createElement('li')
+                var message = document.createElement('div')
                 var content = document.createTextNode(event.data)
                 message.appendChild(content)
                 messages.appendChild(message)
@@ -68,10 +71,13 @@ async def get():
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    counter = 1
     await websocket.accept()
     while True:
         data = await websocket.receive_text()
-        await websocket.send_text(f"New Message: {data}")
+        #data_1 = websocket.receive_json()
+        await websocket.send_json("New Message:" + " " + f"{counter}. {data}")
+        counter += 1
 
       
 if __name__ == "__main__":
